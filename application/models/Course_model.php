@@ -11,10 +11,33 @@ class Course_model extends CI_Model {
     $this->order = array('id' => 'DESC');
   }
 
-  public function getAllCategories() {
-    $this->db->select('name, id');
-    $this->db->where('status', '1')->from($this->table);
+  public function getCourses() {
+    // $this->db->select('course.name, course.id, course.description,coursetoStaff.id, staffs.name');
+    // $this->db->where('course.categoryId', $this->session->userdata('category'));
+    // $this->db->where('staffs.categoryId', $this->session->userdata('category'));
+    // $this->db->where('coursetostaff.courseId', 'course.id');
+    // $this->db->where('coursetostaff.staffId', 'staffs.id');
+    // $this->db->where('course.status', '1')->from($this->table)->join('coursetostaff', 'coursetostaff.courseId = course.id');
+    // $this->db->join('staffs','staffs.id = coursetostaff.staffId');
+    // var_dump($this->db->get()->result());
+    // echo $this->db->last_query();
+    // exit();
+
+    $this->db->select('name, id, description');
+    $this->db->where('status', '1');
+    $this->db->where('categoryId', $this->session->userdata('category'));
+    $this->db->where('staff', $this->session->userdata('username'));
+    $this->db->from($this->table);
     return $this->db->get()->result();
+  }
+
+  public function deleteCourse($id){
+    $this->db->set('status', '0');
+    $this->db->where('id', $id);
+    if($this->db->update($this->table))
+      return "Successfully deleted";
+    return false;
+
   }
 
   public function addCourse($data) {
@@ -22,10 +45,23 @@ class Course_model extends CI_Model {
     if($name->num_rows() > 0){
       return "course";
     } else {
+      $data['staff'] = $this->session->userdata('username');
       if($this->db->insert ($this->table, $data))
+        $this->assignCourseToStaff($data['name']);
         return  "success";
     }
     return false;
+  }
+
+  private function assignCourseToStaff($courseName) {
+    $courseId = $this->db->select('id')->where('name', $courseName)->from($this->table)->get()->row();
+    $staffId = $this->db->select('id')->where('username', $this->session->userdata('username'))->from('staffs')->get()->row();
+    $data = array(
+      'courseId' => $courseId->id,
+      'staffId' => $staffId->id
+    );
+    $this->db->insert('coursetostaff', $data);
+    return true;
   }
 
   public function deleteCategory($data){

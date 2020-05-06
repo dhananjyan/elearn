@@ -1,15 +1,16 @@
 
-function editCategory(a) {
- $("#id").val(a);
+var base_url = $('#base').val();
+function deleteCourse(a) {
   var request = $.ajax({
-          url: base_url+'category/getCategory',
+          url: base_url+'course/deleteCourse',
           type: "POST",
           data: {id : a, 'csrf_test_name': token },
           success: function(response) {
             response = JSON.parse( response );
             token = response.token;
-            document.getElementById("ename").value = response[0].name;
-            $('#updateCategoryModel').modal('toggle');
+            $('.course').empty();
+            getCourses();
+            alert(response.error);
           }
         });
 
@@ -19,15 +20,19 @@ function editCategory(a) {
         });
 }
 
-function  getsCourses() {        
+function  getCourses() {        
   $.ajax({
         url: base_url+'course/getCourses',
         type: "POST",
         data: {'csrf_test_name': token },
-        dataType: 'json',
         success: function(data) {
-          $.each(data, function(index,element) {
-            $('#img').append('<div class="col-lg-3 col-md-4 col-4 select"><div class="d-block mb-4 h-100"><img class="img-fluid img-thumbnail" src="'+base_url+'upload/images/'+element.file_name+'" alt="img"><input type="radio" name="select" value="'+element.id+'"><div class="text-truncate">'+element.file_name+'</div></div></div>');
+          response = JSON.parse( data );
+          token = response.token;
+          $.each(response.courses, function(index,element) {
+            $('.course').append(
+                // '<div class="card col-sm-3  mx-3 mt-4"><div class="card-body"><h4 class="card-title">'+element.name+'</h4><div class="card-text">'+element.description+'</div></div></div>'
+                '<div class="card col-sm-3  mx-3 mt-4"><div class="card-body"><h5 class="card-title pb-2 row"><div class="float-left col-10">'+element.name+'</div><div class="dropdown no-arrow float-right col-2"><a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i></a><div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink"><div class="dropdown-header">Actions:</div><a class="dropdown-item" href="#" onclick="return deleteCourse('+element.id+')">Delete</a></div></div></h5><div class="card-text">'+element.description+'</div></div></div>'
+              )
           });
         },
         statusCode: {
@@ -36,7 +41,8 @@ function  getsCourses() {
            }
         }
       }); }
-var base_url = $('#base').val();
+
+
 
 $(document).ready(function() {   
 
@@ -59,6 +65,8 @@ $(document).ready(function() {
                   document.getElementById("addCourse").reset();
                   $('#addCourseModal').modal('toggle');
                   token = response.token;
+                  $('.course').empty();
+                  getCourses();
                     alert(response.error);
                 },
                 statusCode: {
