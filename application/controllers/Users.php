@@ -119,7 +119,7 @@ class Users extends CI_Controller {
             $row[] = $user->username;
             $row[] = $user->accessType;
             $row[] = $user->createdAt;
-            $row[] = "<a  id='edit' class='btn btn-info btn-circle btn-sm text-white' onclick='return editUser($user->id)'><i class='fas fa-edit'></i></a> | <a class='btn btn-danger btn-circle btn-sm text-white'  onclick='return deleteUser($user->id)'><i class='fas fa-trash'></i>";
+            $row[] = "<a class='btn btn-danger btn-circle btn-sm text-white'  onclick='return deleteUser($user->id)'><i class='fas fa-trash'></i>";
             $data[] = $row;
         }
  

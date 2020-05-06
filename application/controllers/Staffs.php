@@ -2,6 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Staffs extends Staffs_controller {
+  public function __construct() {
+    parent::__construct();
+  }
 
 	public function index() {
 		$data['main_content'] = 'home';

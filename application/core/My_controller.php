@@ -49,3 +49,11 @@ class Admin_Controller extends MY_controller {
     }
 
 }
+
+class Student_Controller extends MY_controller {
+
+    function __construct() {
+      parent::__construct();
+    }
+
+}
