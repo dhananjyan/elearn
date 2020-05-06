@@ -6,7 +6,8 @@
                     Staff Login
                 </h3>
                 <div class="text-danger"><?php if($error) echo $error?></div>
-                <form action="<?= base_url() ?>users/staffLogin" id="alumniLoginForm" method="POST">
+                <!-- <form action="<?= base_url() ?>users/staffLogin" id="alumniLoginForm" method="POST"> -->
+                <?php echo form_open(base_url().'users/staffLogin'); ?>
                     <div class="form-group">
                         <label for="username">Username</label>
                         <input type="text" value="<?php if($username) echo $username?>" name="username" id="username" class="form-control">

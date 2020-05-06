@@ -18,10 +18,18 @@ class User_Controller extends MY_controller {
 
 }
 
-class Staff_Controller extends MY_controller {
+class Staffs_Controller extends MY_controller {
 
     function __construct() {
       parent::__construct();
+      if($this->session->userdata('loggedIn') != true || $this->session->userdata('accessType') != 'staff')
+        show_404();
+    }
+
+    function view($data) {
+      $this->load->view('partials/header1',$data);
+      $this->load->view('staffs/'.$data['main_content']);
+      $this->load->view('partials/footer1');
     }
 
 }
@@ -30,7 +38,7 @@ class Admin_Controller extends MY_controller {
 
     function __construct() {
       parent::__construct();
-      if($this->session->userdata('loggedIn') != true && $this->session->userdata('accessType' != 'admin'))
+      if($this->session->userdata('loggedIn') != true || $this->session->userdata('accessType') != 'admin')
         show_404();
     }
 

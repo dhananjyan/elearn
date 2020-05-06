@@ -26,7 +26,7 @@ class Users_model extends CI_Model {
   }
 
   public function authenticateStaff($user) {
-    $this->db->select('id, username, accessType');
+    $this->db->select(' username,');
     $this->db->where('username', $user['username']);
     $this->db->where('password', md5($user['password']));
     $this->db->where('accessType', 'staff');
@@ -37,6 +37,19 @@ class Users_model extends CI_Model {
       return $query->row();
     }
     return false;
+  }
+
+  public function isRegisteredStaff($username) {
+    $result = $this->db->select('username')->where('username', $username)->from('staffs')->get();
+    if($result->num_rows() == 0){
+      return false;
+    } else {
+      $this->db->select('staffs.username, users.accessType, staffs.categoryId');
+      $this->db->where('staffs.username', $username);
+      $this->db->where('users.username', $username);
+      $this->db->from($this->table)->join('staffs', 'staffs.username = users.username');
+      return $this->db->get()->row();
+    }
   }
 
   public function addUser($data) {
@@ -59,6 +72,12 @@ class Users_model extends CI_Model {
       return "Successfully deleted";
     return false;
 
+  }
+
+  public function staffRegister($data) {
+    $data['username'] = $this->session->userdata('username');
+    $this->db->insert('staffs', $data);
+    return true;
   }
 
   public function getUser() {

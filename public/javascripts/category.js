@@ -1,15 +1,35 @@
+
+function editCategory(a) {
+ $("#id").val(a);
+  var request = $.ajax({
+          url: base_url+'category/getCategory',
+          type: "POST",
+          data: {id : a, 'csrf_test_name': token },
+          success: function(response) {
+            response = JSON.parse( response );
+            token = response.token;
+            document.getElementById("ename").value = response[0].name;
+            $('#updateCategoryModel').modal('toggle');
+          }
+        });
+
+
+        request.fail(function(jqXHR, textStatus) {
+          alert( "Request failed: " + textStatus );
+        });
+}
 var base_url = $('#base').val();
 
 $(document).ready(function() {
 
-    table = $('#usersTable').DataTable({ 
+    table = $('#categoryTable').DataTable({ 
         "responsive": true,
  
         "processing": true,
         "serverSide": true,
         "order": [],
         "ajax": {
-            "url": base_url+"users/getUsers",
+            "url": base_url+"category/getCategories",
             "type": "POST",
         },
  
@@ -19,7 +39,7 @@ $(document).ready(function() {
             "orderable": false,
         },
         { 
-            "targets": [ 4 ],
+            "targets": [ 3 ],
             "orderable": false,
         }
 
@@ -27,43 +47,72 @@ $(document).ready(function() {
 
  
     });
-  $.validator.addMethod("valueNotEquals", function(value, element, arg){
-    return arg !== value;
-  }, "Value must not equal arg.");
 
-        addUser = $("#addUser").validate({
+        addCategory = $("#addCategory").validate({
           rules: {
-            username: "required",
-            password: "required",
-            accessType: { valueNotEquals: "select" },
-          },
-          messages: {
-            accessType: {
-              valueNotEquals: "Please select access type"
-            }
+            name: "required",
           },
           submitHandler: function(form) {
-            $("<input>").attr("type", "hidden").attr('value', token).attr('name', 'csrf_test_name').appendTo("#addUser"); 
+            $("<input>").attr("type", "hidden").attr('value', token).attr('name', 'csrf_test_name').appendTo("#addCategory"); 
             $.ajax({
                 url: form.action,
                 type: form.method,
                 data: $(form).serialize(),
                 success: function(response) {
                   response = JSON.parse( response );
-                	table.ajax.reload();
-                  document.getElementById("addUser").reset();
-                	$('#addUser_modal').modal('toggle');
+                  table.ajax.reload();
+                  document.getElementById("addCategory").reset();
+                  $('#addCategoryModal').modal('toggle');
                   token = response.token;
                     alert(response.error);
                 },
                 statusCode: {
                   404: function() {
-                    $('#addUser_modal').modal('toggle');
+                    $('#addCategoryModal').modal('toggle');
                     alert('There was a problem with the server.  Try again soon!');
                   },
                   500: function() {
-                    $('#addUser_modal').modal('toggle');
+                    $('#addCategoryModal').modal('toggle');
                     alert('Error in Creating User');
+                  },
+                }            
+            });
+          },    
+          highlight: function (element, errorClass, validClass) {
+            return false;
+          },
+          unhighlight: function (element, errorClass, validClass) {
+              return false;
+          },
+        });
+
+
+        updateCategory = $("#updateCategory").validate({
+          rules: {
+            ename: "required",
+          },
+          submitHandler: function(form) {
+            $("<input>").attr("type", "hidden").attr('value', token).attr('name', 'csrf_test_name').appendTo("#updateCategory"); 
+            $.ajax({
+                url: form.action,
+                type: form.method,
+                data: $(form).serialize(),
+                success: function(response) {
+                  response = JSON.parse( response );
+                  table.ajax.reload();
+                  document.getElementById("updateCategory").reset();
+                  $('#updateCategoryModel').modal('toggle');
+                  token = response.token;
+                    alert(response.error);
+                },
+                statusCode: {
+                  404: function() {
+                    $('#updateCategoryModel').modal('toggle');
+                    alert('There was a problem with the server.  Try again soon!');
+                  },
+                  500: function() {
+                    $('#updateCategoryModel').modal('toggle');
+                    alert('Error in updating category');
                   },
                 }            
             });
@@ -78,11 +127,11 @@ $(document).ready(function() {
 
 });
 
-function deleteUser(data) {
+function deleteCategory(data) {
   confirmDialog("Do You Want To Delete ?", (ans) => {
     if (ans) {
       $.ajax({
-        url: base_url+'users/deleteUser',
+        url: base_url+'category/deleteCategory',
         type:'post',
         data:{ id : data, 'csrf_test_name': token },
         dataType: "html",
@@ -96,9 +145,6 @@ function deleteUser(data) {
         }
   });
 }
-
-
-
     function confirmDialog(message, handler){
         $(`<div class="modal fade" id="myModal" role="dialog"> 
            <div class="modal-dialog"> 

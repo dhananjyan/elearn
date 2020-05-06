@@ -55,16 +55,9 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="<?=base_url()?>admin/users" >
-          <i class="fas fa-fw fa-users"></i>
-          <span>Users</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="<?=base_url()?>admin/category" >
-          <i class="fas fa-fw fa-category"></i>
-          <span>Category</span>
+        <a class="nav-link collapsed" href="<?=base_url()?>staffs/courses" >
+          <i class="fas fa-fw fa-book"></i>
+          <span>Courses</span>
         </a>
       </li>
 
@@ -115,11 +108,7 @@
                 </a>
                 <a class="dropdown-item" href="#">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Settings
-                </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Activity Log
+                  Edit Profile
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">

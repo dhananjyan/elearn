@@ -1,3 +1,6 @@
+Login url = http://localhost/elearn/users/adminLogin
+
+
 ###################
 What is CodeIgniter
 ###################

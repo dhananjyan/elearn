@@ -46,7 +46,15 @@ class Users extends CI_Controller {
 				if ($user['password'] != '' && $user['password'] != null ) {
 					$result = $this->Users->authenticateStaff($user);
 					if($result) {
-						$this->setSession($result);
+						$res = $this->Users->isRegisteredStaff($result->username);
+						if($res) {
+							$this->session->set_userdata('category', $res->categoryId);
+							$this->setSession($res);
+						} else {
+							$this->session->set_userdata('username', $result->username);
+							redirect('users/staffRegister');
+						}
+						
 					} else {
 						$data['error'] = 'Username or Password is incorrect';
 						$data['username'] = $user['username'];
@@ -73,7 +81,31 @@ class Users extends CI_Controller {
 			'loggedIn' => true
 		);
 		$this->session->set_userdata($userdata);
+		if($userdata['accessType'] == 'staff')
+			redirect('staffs');
 		redirect('admin');
+	}
+
+	public function staffRegister() {
+		if($this->session->has_userdata('username')) {
+			if($this->input->post()) {
+				$staff = $this->security->xss_clean($this->input->post());
+				if($this->Users->staffRegister($staff)){
+					$this->session->set_userdata('loggedIn', true);
+					$this->session->set_userdata('accessType', 'staff');
+					$this->session->set_userdata('category', $staff['categoryId']);
+					redirect('staffs');
+				} else {
+					echo "error";
+					exit();
+				}
+			}
+			$this->load->model('Category_model');
+			$data['categories'] = $this->Category_model->getAllCategories();
+			$data['title'] = 'Staff Login';
+			$data['main_content'] = 'staffs/register';
+			$this->load->view('loginLayout', $data);
+		}
 	}
 
 	public function getUsers() {
@@ -140,6 +172,16 @@ class Users extends CI_Controller {
 			} 
 			$data['token'] = $this->security->get_csrf_hash();
 			echo json_encode($data);
+		}
+	}
+
+	public function logout() {
+		if($this->session->userdata('accessType') == 'admin') {
+			$this->session->sess_destroy();
+			redirect('users/adminLogin');
+		} else {
+			$this->session->sess_destroy();
+			redirect('users/staffLogin');
 		}
 	}
 

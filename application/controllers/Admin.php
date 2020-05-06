@@ -25,4 +25,18 @@ class Admin extends Admin_controller {
 		$this->view($data);
 	}
 
+	public function category() {
+		$data['main_content'] = 'category';
+		$data['title'] = 'admin';
+		$data['css'] = array(
+			'http://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'
+		);
+		$data['js'] = array(
+			'//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js',
+			base_url().'public/javascripts/category.js',
+			'https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.js'
+		);
+		$this->view($data);
+	}
+
 }
