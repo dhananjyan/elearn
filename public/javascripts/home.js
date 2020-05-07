@@ -1,4 +1,5 @@
 
+var base_url = $('#base').val();
 function getCourse() {
 
   $.ajax({
@@ -10,7 +11,7 @@ function getCourse() {
           token = response.token;
           $.each(response.courses, function(index,element) {
             $('.course').append(
-                '<div class="card col-sm-3  mx-3 mt-4"><div class="card-body"><h5 class="card-title pb-2 row"><div class="float-left col-10">'+element.name+'</div><div class="dropdown no-arrow float-right col-2"><a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i></a><div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink"><div class="dropdown-header">Actions:</div><a class="dropdown-item" href="#" onclick="return deleteCourse('+element.id+')">Delete</a></div></div></h5><div class="card-text">'+element.description+'</div></div></div>'
+                '<div class="col-12 col-sm-3 mt-5"><div class="card"><div class="card-header"><h4>'+element.name+'</h4></div><div class="card-body" style="height: 150px;"><div class="card-text">'+element.description+'</div></div></div></div>'
               )
           });
         },
@@ -46,6 +47,8 @@ function getCourse() {
                   document.getElementById("joinClass").reset();
                   $('#joinClassModal').modal('toggle');
                   token = response.token;
+                  $('.course').empty();
+                  getCourse();
                     alert(response.error);
                 },
                 statusCode: {

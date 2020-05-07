@@ -7,6 +7,11 @@
 	</div>
 </div>
 
+<div class="container-fluid">
+	<div class="row course">
+	</div>
+</div>
+
 
 
     <!-- The Modal -->
@@ -33,7 +38,7 @@
       <!-- Modal footer -->
       <div class="modal-footer">
       <button type="reset" class="btn btn-secondary">Clear</button>
-      <button type="submit" id="addUserSubmit" class="btn btn-primary">Create</button>
+      <button type="submit" id="addUserSubmit" class="btn btn-primary">Join</button>
       </div>
       
     </form>

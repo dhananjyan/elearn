@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+if ( ! class_exists('My_Controller'))
+{
+    require_once APPPATH.'core/MY_controller.php';
+}
 class Admin extends Admin_controller {
 
   public function __construct() {

@@ -22,6 +22,7 @@
 $this->load->view('students/'.$main_content);
 ?>
 
+<input type="hidden" id="base" value="<?php echo base_url(); ?>">
   <script type="text/javascript">
 
     var token = '<?php echo $this->security->get_csrf_hash(); ?>';

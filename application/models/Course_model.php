@@ -31,6 +31,17 @@ class Course_model extends CI_Model {
     return $this->db->get()->result();
   }
 
+  public function getSharedPost($id) {
+    $data = $this->db->select('id,title,share,createdAt')->where('courseId', $id)->from('share')->order_by('createdAt', 'desc')->get()->result();
+    return $data;
+  }
+
+  public function postShare($post) {
+      if($this->db->insert ('share', $post))
+        return  "Posted";
+    return false;
+  }
+
   public function deleteCourse($id){
     $this->db->set('status', '0');
     $this->db->where('id', $id);
@@ -38,6 +49,23 @@ class Course_model extends CI_Model {
       return "Successfully deleted";
     return false;
 
+  }
+
+  public function getComments($id){
+    return $this->db->select('id,comment,username,createdAt')->where('shareId', $id)->from('comment')->order_by('createdAt', 'desc')->get()->result();
+  }
+
+  public function postComment($data) {
+    if($this->db->insert('comment', $data)){
+      return "Success";
+    }
+    return "Error";
+  }
+
+  public function getCourse($id) {
+    $data['course'] = $this->db->select('name, description, id')->from('course')->where('id', $id)->get()->row();
+    $data['students'] = $this->db->select('studentId')->where('courseId', $data['course']->id)->where('status', '1')->from('studenttocourse')->get()->num_rows();
+    return $data;
   }
 
   public function addCourse($data) {

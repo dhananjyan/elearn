@@ -26,7 +26,7 @@ class Student_model extends CI_Model {
     $studentId = $this->db->select('id')->where('rollNo',$this->session->userdata('rollNo'))->from($this->table)->get()->row();
     $this->db->select('id');
     $this->db->where('id',$code);
-    $this->db->where('status',1);
+    $this->db->where('status','1');
     $this->db->from('course');
     $courseId = $this->db->get();
     if($courseId->num_rows() < 1){
@@ -47,11 +47,21 @@ class Student_model extends CI_Model {
   public function getCourse(){
 
     $studentId = $this->db->select('id')->where('rollNo',$this->session->userdata('rollNo'))->from($this->table)->get()->row();
-    $this->db->select('course.name, course.id, course.description');
-    $this->db->where('course.status', '1');
-    $this->db->where('course.categoryId', $this->session->userdata('category')); 
+    $courses = $this->db->select('courseId')->where('studentId', $studentId->id)->from('studenttocourse')->get();
+    if($courses->num_rows() < 1){
+      return;
+    }
+    $courses = $courses->result();
+    $this->db->select('name, id, description');
+    $this->db->where('status', '1');
+     $data=null;
+    foreach ($courses as $row){
+      $data[]=$row->courseId;
+    }
+    $this->db->where_in('id',$data);
     $this->db->from('course');
     return $this->db->get()->result();
+    
   }
 
   public function authenticateStudent($data) {

@@ -20,6 +20,8 @@ function deleteCourse(a) {
         });
 }
 
+function courseClick() { }
+
 function  getCourses() {        
   $.ajax({
         url: base_url+'course/getCourses',
@@ -31,7 +33,7 @@ function  getCourses() {
           $.each(response.courses, function(index,element) {
             $('.course').append(
                 // '<div class="card col-sm-3  mx-3 mt-4"><div class="card-body"><h4 class="card-title">'+element.name+'</h4><div class="card-text">'+element.description+'</div></div></div>'
-                '<div class="card col-sm-3  mx-3 mt-4"><div class="card-body"><h5 class="card-title pb-2 row"><div class="float-left col-10">'+element.name+'</div><div class="dropdown no-arrow float-right col-2"><a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i></a><div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink"><div class="dropdown-header">Actions:</div><a class="dropdown-item" href="#" onclick="return deleteCourse('+element.id+')">Delete</a></div></div></h5><div class="card-text">'+element.description+'</div></div></div>'
+                '<div class="card col-sm-3  mx-3 mt-4"><div class="card-body"><h5 class="card-title pb-2 row"><div class="float-left col-10"><a href="'+base_url+'staffs/course/'+element.id+'" class="text-info">'+element.name+'</a></div><div class="dropdown no-arrow float-right col-2"><a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i></a><div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink"><div class="dropdown-header">Actions:</div><a class="dropdown-item" href="#" onclick="return deleteCourse('+element.id+')">Delete</a></div></div></h5><div class="card-text">'+element.description+'<div>Code: '+element.id+'</div></div></div></div>'
               )
           });
         },

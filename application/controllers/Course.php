@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+if ( ! class_exists('My_Controller'))
+{
+    require_once APPPATH.'core/MY_controller.php';
+}
 class Course extends Staffs_controller {
 
   public function __construct() {
@@ -27,6 +30,19 @@ class Course extends Staffs_controller {
 		}
 	}
 
+	public function postShare() {
+		if($this->input->post()) {
+			$data['error'] = $this->Course->postShare($this->security->xss_clean($this->input->post()));
+			if(! $data['error']) {
+				$data['error'] = "Error in share your details";
+			} 
+			$data['token'] = $this->security->get_csrf_hash();
+			echo json_encode($data);
+		}
+	}
+
+
+
 	public function deleteCourse() {
 		if($this->input->post()) {
 			$data['result'] = $this->Course->deleteCourse($this->security->xss_clean($this->input->post('id')));
@@ -44,4 +60,6 @@ class Course extends Staffs_controller {
 		$data['token'] =$this->security->get_csrf_hash();
 		echo json_encode($data);
 	}
+
+
 }

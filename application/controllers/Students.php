@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+if ( ! class_exists('My_Controller'))
+{
+    require_once APPPATH.'core/MY_controller.php';
+}
 class Students extends Student_Controller {
 
   public function __construct() {

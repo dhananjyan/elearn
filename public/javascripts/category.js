@@ -1,4 +1,5 @@
 
+var base_url = $('#base').val();
 function editCategory(a) {
  $("#id").val(a);
   var request = $.ajax({
@@ -18,7 +19,6 @@ function editCategory(a) {
           alert( "Request failed: " + textStatus );
         });
 }
-var base_url = $('#base').val();
 
 $(document).ready(function() {
 

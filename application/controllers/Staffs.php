@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+if ( ! class_exists('My_Controller'))
+{
+    require_once APPPATH.'core/MY_controller.php';
+}
 class Staffs extends Staffs_controller {
   public function __construct() {
     parent::__construct();
@@ -44,6 +47,52 @@ class Staffs extends Staffs_controller {
 			$data['token'] = $this->security->get_csrf_hash();
 			echo json_encode($data);
 
+		}
+	}
+
+	public function show() {
+		if($this->uri->segment(3)){
+		$this->load->model('Course_model', 'Course');
+		$courseId = $this->uri->segment(3);
+		$data['main_content'] = 'show';
+		$data['title'] = 'Course';
+		$data['css'] = array();
+		$data['js'] = array(
+			'https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.js',
+			base_url().'public/javascripts/show.js'
+		);
+		$data['result'] = $this->Course->getCourse($courseId);
+		$this->view($data);
+		}
+	}
+
+		public function getSharedPost() {
+		if($this->input->post()){
+		$this->load->model('Course_model', 'Course');
+			$result = $this->Course->getSharedPost($this->input->post('id'));
+			$data['shared'] = $result;
+			$data['token'] =$this->security->get_csrf_hash();
+			echo json_encode($data);
+		}
+	}
+
+	public function getComments() {
+		if($this->input->post()) {
+		$this->load->model('Course_model', 'Course');
+		$result = $this->Course->getComments($this->input->post('id'));
+			$data['comments'] = $result;
+			$data['token'] =$this->security->get_csrf_hash();
+			echo json_encode($data);
+		}
+	}
+
+	public function postComment(){
+		if($this->input->post()) {
+		$this->load->model('Course_model', 'Course');
+		$result = $this->Course->postComment($this->input->post());
+			$data['error'] = $result;
+			$data['token'] =$this->security->get_csrf_hash();
+			echo json_encode($data);
 		}
 	}
 }
